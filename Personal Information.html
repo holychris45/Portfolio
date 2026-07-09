@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Personal Portfolio</title>
+    <style>
+        /* CSS VARIABLES & THEMING */
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --primary-color: #2563eb;
+            --secondary-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --border-color: #e5e7eb;
+            --accent-color: #059669;
+            --transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #0f172a;
+            --text-color: #f8fafc;
+            --primary-color: #3b82f6;
+            --secondary-color: #1e293b;
+            --card-bg: #1e293b;
+            --border-color: #334155;
+            --accent-color: #10b981;
+        }
+
+        /* BASE STYLES */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: var(--transition);
+            padding-top: 70px;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 80px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 4px;
+            background-color: var(--primary-color);
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+
+        /* HEADER & NAVIGATION */
+        header {
+            background-color: var(--bg-color);
+            border-bottom: 1px solid var(--border-color);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary-color);
+            background-color: var(--secondary-color);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: 2px solid var(--border-color);
+            color: var(--text-color);
+            padding: 5px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--primary-color);
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            background: none;
+            border: none;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: var(--text-color);
+            border-radius: 3px;
+            transition: var(--transition);
+        }
+
+        /* HERO SECTION */
+        #hero {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            min-height: calc(80vh - 70px);
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--bg-color) 100%);
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+
+        .hero-content h1 span {
+            color: var(--primary-color);
+        }
+
+        .hero-content p {
+            font-size: 1.25rem;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0.9;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: #ffffff;
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* ABOUT ME SECTION (With Passport Image Layout) */
+        .about-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .about-layout {
+                grid-template-columns: 250px 1fr;
+            }
+        }
+
+        .passport-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .passport-img {
+            width: 220px;
+            height: 220px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 4px solid var(--border-color);
+            background-color: var(--secondary-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        @media (min-width: 992px) {
+            .about-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .skill-tag {
+            background-color: var(--secondary-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid var(--border-color);
+        }
+
+        /* PROJECTS SECTION (Image & Video Media Support) */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .project-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .project-media-wrapper {
+            width: 100%;
+            height: 200px;
+            background-color: var(--secondary-color);
+            overflow: hidden;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .project-media-wrapper img, 
+        .project-media-wrapper video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .project-info {
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        .project-info h3 {
+            margin-bottom: 10px;
+        }
+
+        .project-info p {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+
+        /* CONTACT SECTION */
+        .contact-wrapper {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            font-family: inherit;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+
+        .error-message {
+            color: #dc2626;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success-message {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        /* FOOTER */
+        footer {
+            background-color: var(--secondary-color);
+            text-align: center;
+            padding: 30px 0;
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* RESPONSIVE HAMBURGER NAVIGATION */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .hamburger.active span:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+            .hamburger.active span:nth-child(2) {
+                opacity: 0;
+            }
+            .hamburger.active span:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+
+            .nav-menu {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                flex-direction: column;
+                background-color: var(--bg-color);
+                width: 100%;
+                height: calc(100vh - 70px);
+                text-align: center;
+                padding-top: 40px;
+                transition: 0.3s;
+                border-top: 1px solid var(--border-color);
+                gap: 30px;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .nav-link {
+                font-size: 1.2rem;
+                display: block;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGATION MENU -->
+    <header>
+        <div class="container navbar">
+            <a href="#hero" class="logo">MyPortfolio.</a>
+            
+            <div class="nav-actions">
+                <nav>
+                    <ul class="nav-menu" id="nav-menu">
+                        <li><a href="#hero" class="nav-link active">Home</a></li>
+                        <li><a href="#about" class="nav-link">About Me</a></li>
+                        <li><a href="#projects" class="nav-link">Projects</a></li>
+                        <li><a href="#contact" class="nav-link">Contact</a></li>
+                    </ul>
+                </nav>
+                
+                <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">Dark Mode</button>
+                
+                <button class="hamburger" id="hamburger" aria-label="Open navigation menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section id="hero">
+        <div class="container hero-content">
+            <h1>Hi, I'm <span>CHRISTOPHER BOTCHWAY</span></h1>
+            <p>A passionate Developer & Designer building clean, responsive, and functional web applications.</p>
+            <a href="#projects" class="btn">View My Work</a>
+        </div>
+    </section>
+
+    <!-- ABOUT ME SECTION -->
+    <section id="about">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-layout">
+                
+                <!-- Passport Frame Container -->
+                <div class="passport-container">
+                    <img src="C:\Users\BEN\Desktop\HTML_CSS Code\IMG\IMG_8919.jpg" alt="Your Passport Picture" class="passport-img" onerror="this.style.display='none'; this.parentNode.innerHTML='<div style=\'width:220px; height:220px; border-radius:12px; border:4px dashed var(--border-color); display:flex; align-items:center; text-align:center; padding:20px; font-size:0.9rem;\'>Add passport.jpg to images/ directory</div>'">
+                </div>
+
+                <div class="about-grid">
+                    <div>
+                        <h3>My Journey</h3>
+                        <p style="margin-top: 15px;">
+                            I am a web designer and developer focused on creating clean and user-friendly digital experiences. I enjoy turning complex problems into straightforward, beautiful, and intuitive interfaces. 
+                        </p>
+                        <p style="margin-top: 15px;">
+                            When I'm not coding, you can find me exploring new technologies, working on creative side projects, or sharpening my design skills.
+                        </p>
+                    </div>
+                    <div>
+                        <h3>Core Skills</h3>
+                        <div class="skills-container">
+                            <span class="skill-tag">HTML5 / CSS3</span>
+                            <span class="skill-tag">Responsive Design</span>
+                            <span class="skill-tag">Flexbox / Grid</span>
+                            <span class="skill-tag">JavaScript (ES6+)</span>
+                            <span class="skill-tag">Git / GitHub</span>
+                            <span class="skill-tag">UI/UX Layouts</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- PROJECTS SECTION -->
+    <section id="projects">
+        <div class="container">
+            <h2 class="section-title">My Projects</h2>
+            <div class="projects-grid">
+                
+                <!-- Project 1 (Image Demonstration) -->
+                <div class="project-card">
+                    <div class="project-media-wrapper">
+                        <img src="images/project1.jpg" alt="E-Commerce Interface" onerror="this.style.display='none'; this.parentNode.innerHTML='<div style=\'height:100%; display:flex; align-items:center; justify-content:center; color:var(--primary-color); font-weight:bold;\'>Add project1.jpg to images/</div>'">
+                    </div>
+                    <div class="project-info">
+                        <h3>E-Commerce Interface</h3>
+                        <p>A fully responsive retail storefront designed mobile-first using modern CSS Flexbox modules.</p>
+                    </div>
+                </div>
+
+                <!-- Project 2 (Video Demonstration) -->
+                <div class="project-card">
+                    <div class="project-media-wrapper">
+                        <!-- 'muted autoplay loop playsinline' ensures clean, seamless video looping on mobile devices -->
+                        <video src="C:\Users\BEN\Desktop\HTML_CSS Code\Videos\Hacker with hoodie and glitch face. Computer abstract digital code at the background. Dark web or darknet fraud Stock Video - Adobe Stock.mp4" muted autoplay loop playsinline controls></video>
+                    </div>
+                    <div class="project-info">
+                        <h3>Task Dashboard Demo</h3>
+                        <p>An intricate data tracking application styled clean with CSS Grid layout utilities shown via video.</p>
+                    </div>
+                </div>
+
+                <!-- Project 3 (Alternative Video Frame) -->
+                <div class="project-card">
+                    <div class="project-media-wrapper">
+                        <video src="C:\Users\BEN\Desktop\HTML_CSS Code\Videos\rainy-day-umbrella-wet-transparent.mp4" muted autoplay loop playsinline controls></video>
+                    </div>
+                    <div class="project-info">
+                        <h3>Weather Application</h3>
+                        <p>An interactive, API-driven weather forecasting platform featuring interactive structural styling elements.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT FORM SECTION -->
+    <section id="contact">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="contact-wrapper">
+                
+                <div class="success-message" id="success-msg">
+                    Thank you! Your message has been validated and sent successfully.
+                </div>
+
+                <form id="contactForm" novalidate>
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" class="form-control" placeholder="Enter your full name">
+                        <div class="error-message" id="name-error">Please enter your name.</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" class="form-control" placeholder="Enter your email address">
+                        <div class="error-message" id="email-error">Please enter a valid email address.</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" rows="5" class="form-control" placeholder="Write your message here..."></textarea>
+                        <div class="error-message" id="message-error">Please type a short message.</div>
+                    </div>
+                    
+                    <button type="submit" class="btn" style="width: 100%;">Submit Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 CHRISTOPHER BOTCHWAY. All Rights Reserved. Prepared for Week 10 Demonstration.</p>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE JAVASCRIPT -->
+    <script>
+        // HAMBURGER MENU INTERACTION
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('nav-menu');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+
+        // LIGHT / DARK MODE TOGGLE
+        const themeToggle = document.getElementById('theme-toggle');
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                document.documentElement.removeAttribute('data-theme');
+                themeToggle.textContent = 'Dark Mode';
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeToggle.textContent = 'Light Mode';
+            }
+        });
+
+        // JAVASCRIPT FORM VALIDATION
+        const form = document.getElementById('contactForm');
+        const successMsg = document.getElementById('success-msg');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('name');
+            const email = document.getElementById('email');
+            const message = document.getElementById('message');
+            
+            const nameError = document.getElementById('name-error');
+            const emailError = document.getElementById('email-error');
+            const messageError = document.getElementById('message-error');
+            
+            let isValid = true;
+
+            if (name.value.trim() === "") {
+                nameError.style.display = "block";
+                name.style.borderColor = "#dc2626";
+                isValid = false;
+            } else {
+                nameError.style.display = "none";
+                name.style.borderColor = "var(--border-color)";
+            }
+
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email.value.trim())) {
+                emailError.style.display = "block";
+                email.style.borderColor = "#dc2626";
+                isValid = false;
+            } else {
+                emailError.style.display = "none";
+                email.style.borderColor = "var(--border-color)";
+            }
+
+            if (message.value.trim() === "") {
+                messageError.style.display = "block";
+                message.style.borderColor = "#dc2626";
+                isValid = false;
+            } else {
+                messageError.style.display = "none";
+                message.style.borderColor = "var(--border-color)";
+            }
+
+            if (isValid) {
+                successMsg.style.display = "block";
+                form.reset();
+                window.scrollTo({
+                    top: document.getElementById('contact').offsetTop,
+                    behavior: 'smooth'
+                });
+                
+                setTimeout(() => {
+                    successMsg.style.display = "none";
+                }, 5000);
+            }
+        });
+
+        // ACTIVE NAVIGATION LINK ON SCROLL
+        window.addEventListener('scroll', () => {
+            let currentSection = 'hero';
+            const sections = document.querySelectorAll('section');
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 80;
+                if (window.scrollY >= sectionTop) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${currentSection}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
